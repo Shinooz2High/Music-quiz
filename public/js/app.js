@@ -369,7 +369,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
   let loadingTimeout = null;
 
-  function showLoading(msg = 'Đang xử lý...') {
+  function showLoading(msg = 'Đang xử lý...', timeoutMs = 6000) {
     const el = document.getElementById('loading-overlay');
     if (el) {
       const p = el.querySelector('p');
@@ -377,10 +377,15 @@ document.addEventListener('DOMContentLoaded', () => {
       el.hidden = false;
       el.style.display = 'flex';
     }
-    if (loadingTimeout) clearTimeout(loadingTimeout);
-    loadingTimeout = setTimeout(() => {
-      hideLoading();
-    }, 6000);
+    if (loadingTimeout) {
+      clearTimeout(loadingTimeout);
+      loadingTimeout = null;
+    }
+    if (timeoutMs > 0) {
+      loadingTimeout = setTimeout(() => {
+        hideLoading();
+      }, timeoutMs);
+    }
   }
 
   function hideLoading() {
@@ -600,40 +605,95 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const res = await fetch('/api/upload', { method: 'POST', body: formData });
     if (!res.ok) {
-      throw new Error(`Upload failed: ${res.statusText}`);
+      let errMsg = `Lỗi tải lên (${res.status})`;
+      try {
+        const errJson = await res.json();
+        if (errJson && errJson.error) errMsg = errJson.error;
+      } catch (e) {}
+      throw new Error(errMsg);
     }
-    return res.json(); // { fileName, originalName, url }
+    return res.json(); // { fileName, originalName, url, files: [...] }
   }
 
   /**
-   * Process one or more files: upload each, add to song list, notify server.
+   * Process one or more files: upload concurrently with progress, add to song list, notify server.
    */
   async function handleFiles(files) {
     if (!files || files.length === 0) return;
-    showLoading();
 
-    for (const file of files) {
-      try {
-        const data = await uploadFile(file);
-        // Ưu tiên tên file gốc từ trình duyệt (chuẩn UTF-8) và khắc phục lỗi mojibake
-        const rawName = (file && file.name) ? file.name : (data.originalName || '');
-        const cleanName = fixMojibake(rawName);
-        const title = cleanName.replace(/\.[^/.]+$/, '').trim();
-        songs.push({
-          id: generateId(),
-          title,
-          fileName: data.fileName,
-          url: data.url,
-          originalName: cleanName,
-        });
-      } catch (err) {
-        showToast(`Lỗi tải lên "${file.name}": ${err.message}`, 'error');
+    // Chuyển FileList thành mảng và lọc các định dạng âm thanh hợp lệ
+    const fileList = Array.from(files).filter(f => {
+      const name = (f.name || '').toLowerCase();
+      return (f.type && f.type.startsWith('audio/')) ||
+             /\.(mp3|wav|ogg|m4a|aac|webm|flac)$/i.test(name);
+    });
+
+    if (fileList.length === 0) {
+      showToast('Vui lòng chọn các file âm thanh hợp lệ (.mp3, .wav, .m4a, .aac, .flac...)', 'warning');
+      return;
+    }
+
+    const total = fileList.length;
+    let completed = 0;
+    let successCount = 0;
+    const errors = [];
+
+    // Tắt timeout tự đóng để overlay hiển thị liên tục trong quá trình tải nhiều file
+    showLoading(`Đang chuẩn bị tải lên ${total} file nhạc...`, 0);
+
+    // Concurrency pool (tối đa 3 file upload song song)
+    const CONCURRENCY = Math.min(3, total);
+    let currentIndex = 0;
+
+    async function uploadWorker() {
+      while (currentIndex < total) {
+        const fileIdx = currentIndex++;
+        const file = fileList[fileIdx];
+
+        showLoading(`Đang tải lên (${completed + 1}/${total}): ${file.name}`, 0);
+
+        try {
+          const data = await uploadFile(file);
+          // Ưu tiên tên file gốc từ trình duyệt (chuẩn UTF-8) và khắc phục lỗi mojibake
+          const rawName = (file && file.name) ? file.name : (data.originalName || '');
+          const cleanName = fixMojibake(rawName);
+          const title = cleanName.replace(/\.[^/.]+$/, '').trim();
+
+          songs.push({
+            id: generateId(),
+            title,
+            fileName: data.fileName,
+            url: data.url,
+            originalName: cleanName,
+          });
+          successCount++;
+        } catch (err) {
+          console.error(`Lỗi tải lên file ${file.name}:`, err);
+          errors.push(`${file.name}: ${err.message || 'Lỗi không xác định'}`);
+        } finally {
+          completed++;
+          showLoading(`Đã xử lý ${completed}/${total} file nhạc...`, 0);
+        }
       }
     }
+
+    const workers = [];
+    for (let i = 0; i < CONCURRENCY; i++) {
+      workers.push(uploadWorker());
+    }
+    await Promise.all(workers);
 
     hideLoading();
     renderSongList();
     socket.emit('update-songs', { songs });
+
+    if (successCount > 0 && errors.length === 0) {
+      showToast(`🎉 Đã tải lên thành công toàn bộ ${successCount} bài hát!`, 'success', 3500);
+    } else if (successCount > 0 && errors.length > 0) {
+      showToast(`Tải thành công ${successCount}/${total} bài hát (${errors.length} file lỗi).`, 'warning', 4500);
+    } else if (errors.length > 0) {
+      showToast(`Không thể tải lên: ${errors[0]}`, 'error', 4500);
+    }
   }
 
   // ─── QR Code Fetching ─────────────────────────────────────────────────────
