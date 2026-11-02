@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>🎵 Music Quiz</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="/css/style.css?v=7" />
+</head>
+<body>
+  <!-- Ambient Aurora Orbs for Glassmorphism -->
+  <div class="glass-orb-container" aria-hidden="true">
+    <div class="glass-orb glass-orb-1"></div>
+    <div class="glass-orb glass-orb-2"></div>
+    <div class="glass-orb glass-orb-3"></div>
+    <div class="glass-orb glass-orb-4"></div>
+  </div>
+
+  <div id="app">
+
+    <!-- ============================================================
+         SCREEN 1: Welcome / Home
+         ============================================================ -->
+    <div id="screen-home" class="screen active">
+      <h1>🎵 Music Quiz</h1>
+      <p class="subtitle">Đoán bài hát - Thử thách âm nhạc</p>
+
+      <!-- Lucian UX/UI Prompt #205 · MIT License (c) 2026 Seokwoooo · https://lucianlabs.dev/uxui-prompt/#205 -->
+      <style>
+      :root{
+        color-scheme:light;
+        --ux-page:#F4F2EE;
+        --ux-surface:#FFFFFF;
+        --ux-surface-2:#F5F3EF;
+        --ux-surface-3:#EAE7E1;
+        --ux-ink:#16151B;
+        --ux-ink-2:#57535F;
+        --ux-ink-3:#8E8A97;
+        --ux-line:rgba(22,21,27,.09);
+        --ux-line-2:rgba(22,21,27,.17);
+        --ux-accent:#6A57F2;
+        --ux-accent-2:#2F8FE0;
+        --ux-accent-soft:rgba(106,87,242,.12);
+        --ux-accent-ink:#FFFFFF;
+        --ux-mint:#119C72;
+        --ux-warn:#D6731E;
+        --ux-danger:#D93A55;
+        --ux-glass:rgba(255,255,255,.58);
+        --ux-glass-line:rgba(255,255,255,.85);
+        --ux-shadow:rgba(40,30,80,.14);
+        --ux-shadow-strong:rgba(40,30,80,.3);
+        --ux-grad:linear-gradient(120deg,#7B61FF,#3D8BFF 55%,#1FB89A);
+        --ux-ease:cubic-bezier(.2,.8,.2,1);
+        --ux-spring:cubic-bezier(.34,1.45,.64,1);
+      }
+      @media (prefers-color-scheme:dark){
+        :root:not([data-theme="light"]){
+          color-scheme:dark;
+          --ux-page:var(--bg-body, #07080D);
+          --ux-surface:var(--bg-glass-card, rgba(22, 22, 48, 0.62));
+          --ux-surface-2:rgba(255, 255, 255, 0.06);
+          --ux-surface-3:rgba(255, 255, 255, 0.1);
+          --ux-ink:var(--text-primary, #F4F0E8);
+          --ux-ink-2:var(--text-secondary, rgba(244,240,232,.68));
+          --ux-ink-3:var(--text-muted, rgba(244,240,232,.42));
+          --ux-line:rgba(255,255,255,.12);
+          --ux-line-2:rgba(255,255,255,.2);
+          --ux-accent:var(--primary, #8b5cf6);
+          --ux-accent-2:var(--secondary, #ec4899);
+          --ux-accent-soft:rgba(139,92,246,.18);
+          --ux-accent-ink:#ffffff;
+          --ux-mint:#10b981;
+          --ux-warn:#f59e0b;
+          --ux-danger:#ef4444;
+          --ux-glass:rgba(255,255,255,.08);
+          --ux-glass-line:rgba(255,255,255,.2);
+          --ux-shadow:rgba(0,0,0,.45);
+          --ux-shadow-strong:rgba(0,0,0,.7);
+          --ux-grad:linear-gradient(120deg,#8b5cf6,#ec4899 55%,#06b6d4);
+        }
+      }
+      :root[data-theme="dark"],
+      body {
+        --ux-page:var(--bg-body, #07080D);
+        --ux-surface:var(--bg-glass-card, rgba(22, 22, 48, 0.62));
+        --ux-surface-2:rgba(255, 255, 255, 0.06);
+        --ux-surface-3:rgba(255, 255, 255, 0.1);
+        --ux-ink:var(--text-primary, #ffffff);
+        --ux-ink-2:var(--text-secondary, #c7c7ec);
+        --ux-ink-3:var(--text-muted, #8282b0);
+        --ux-line:rgba(255,255,255,.14);
+        --ux-line-2:rgba(255,255,255,.22);
+        --ux-accent:var(--primary, #8b5cf6);
+        --ux-accent-2:var(--secondary, #ec4899);
+        --ux-accent-soft:rgba(139,92,246,.18);
+        --ux-accent-ink:#ffffff;
+        --ux-mint:#10b981;
+        --ux-warn:#f59e0b;
+        --ux-danger:#ef4444;
+        --ux-glass:rgba(255,255,255,.08);
+        --ux-glass-line:rgba(255,255,255,.2);
+        --ux-shadow:rgba(0,0,0,.45);
+        --ux-shadow-strong:rgba(0,0,0,.7);
+        --ux-grad:linear-gradient(120deg,#8b5cf6,#ec4899 55%,#06b6d4);
+      }
+
+      .ux,.ux *,.ux *::before,.ux *::after{box-sizing:border-box}
+      .ux{
+        font-family:"Pretendard Variable",Pretendard,-apple-system,BlinkMacSystemFont,"Apple SD Gothic Neo","Segoe UI",Roboto,"Noto Sans KR",sans-serif;
+        color:var(--ux-ink);-webkit-font-smoothing:antialiased;letter-spacing:-.01em;
+        -webkit-tap-highlight-color:transparent;
+        word-break:keep-all;overflow-wrap:break-word;
+      }
+
+      :where(.ux) :is(button,input,textarea,select){font:inherit;color:inherit}
+      :where(.ux) button{cursor:pointer}
+      .ux :focus-visible{outline:2px solid var(--ux-accent);outline-offset:3px}
+      .ux [hidden]{display:none!important}
+
+      @media (prefers-reduced-motion:reduce){
+        .ux,.ux *,.ux *::before,.ux *::after{
+          animation-duration:.001ms!important;animation-iteration-count:1!important;
+          transition-duration:.001ms!important;scroll-behavior:auto!important;
+        }
+      }
+      </style>
+
+      <style>
+      .u205{
+        position:relative;
+        width:100%;
+        max-width:340px;
+        height:270px;
+        display:flex;
+        flex-direction:column;
+        padding:20px;
+        border-radius:28px;
+        background:var(--ux-surface);
+        backdrop-filter:blur(24px) saturate(190%);
+        -webkit-backdrop-filter:blur(24px) saturate(190%);
+        border:1px solid rgba(255,255,255,.14);
+        border-top:1px solid rgba(255,255,255,.3);
+        box-shadow:0 0 0 1px var(--ux-line),0 30px 60px -36px var(--ux-shadow-strong),inset 0 1px 0 rgba(255,255,255,.2);
+        overflow:hidden;
+        margin:4px auto;
+      }
+      .u205-sea{position:absolute;left:0;right:0;bottom:0;height:120px;background:linear-gradient(transparent,color-mix(in srgb,var(--ux-accent-2) 12%,transparent));pointer-events:none}
+      .u205-wd{position:relative;flex:1;display:flex;align-items:center;justify-content:center;gap:2px;cursor:default;touch-action:none;user-select:none}
+      .u205-l{position:relative;display:inline-block;font-size:54px;line-height:1;font-weight:900;letter-spacing:-.02em;color:color-mix(in oklab,var(--ux-accent) calc(var(--t,0) * 100%),var(--ux-ink));transform:translateY(var(--y,0px)) scaleY(var(--sy,1));transform-origin:50% 100%;will-change:transform}
+      .u205-l::after{content:"";position:absolute;left:12%;right:12%;bottom:-14px;height:6px;border-radius:50%;background:var(--ux-shadow-strong);opacity:calc(.5 - var(--t,0) * .35);transform:translateY(calc(var(--y,0px) * -1)) scaleX(calc(1 - var(--t,0) * .5));filter:blur(2px)}
+      .u205-ft{position:relative;display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:18px;background:var(--ux-surface-2);border:1px solid var(--ux-line)}
+      .u205-ft label{display:flex;flex-direction:column;gap:6px;flex:1;font-size:11.5px;font-weight:700;color:var(--ux-ink-3)}
+      .u205-ft label span{display:flex;justify-content:space-between}
+      .u205-ft label b{color:var(--ux-ink);font-variant-numeric:tabular-nums}
+      .u205-r{width:100%;height:18px;margin:0;accent-color:var(--ux-accent);cursor:pointer}
+      .u205-go{flex:none;height:40px;padding:0 15px;border:0;border-radius:13px;background:linear-gradient(135deg,var(--ux-accent),var(--ux-accent-2));color:#ffffff;font-size:13px;font-weight:750;box-shadow:0 4px 14px var(--ux-shadow);transition:transform .35s var(--ux-spring)}
+      .u205-go:active{transform:scale(.93)}
+      </style>
+      <div class="ux u205">
+        <div class="u205-sea" aria-hidden="true"></div>
+        <div class="u205-wd" role="img" aria-label="MUSIC"></div>
+        <div class="u205-ft">
+          <label><span>Wave height<b class="u205-v">34</b></span><input class="u205-r" type="range" min="10" max="64" value="34" aria-label="Wave height"></label>
+          <button class="u205-go" type="button">Send a wave</button>
+        </div>
+      </div>
+
+      <script>
+      (function () {
+        var root = document.currentScript ? document.currentScript.previousElementSibling : document.querySelector('.u205');
+        if (!root) return;
+        var wd = root.querySelector('.u205-wd'), range = root.querySelector('.u205-r'), val = root.querySelector('.u205-v');
+        var rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        var WORD = 'MUSIC', SIG = 34;
+        var amp = 34, px = null, pulse = null, raf = 0;
+        var L = Array.from(WORD).map(function (ch) {
+          var s = document.createElement('span');
+          s.className = 'u205-l'; s.textContent = ch; s.setAttribute('aria-hidden', 'true');
+          wd.appendChild(s);
+          return { el: s, x: 0, y: 0, v: 0 };
+        });
+        function measure() { L.forEach(function (l) { l.x = l.el.offsetLeft + l.el.offsetWidth / 2; }); }
+        function g(d, s) { return Math.exp(-(d * d) / (2 * s * s)); }
+        function tick(now) {
+          raf = 0;
+          if (!root.isConnected) return;
+          var moving = false, pc = null;
+          if (pulse) {
+            var k = (now - pulse) / 1100;
+            if (k >= 1) pulse = null; else pc = -60 + (wd.offsetWidth + 120) * k;
+          }
+          L.forEach(function (l) {
+            var tgt = 0;
+            if (px != null) tgt -= amp * g(l.x - px, SIG);
+            if (pc != null) tgt -= amp * 1.35 * g(l.x - pc, SIG * 1.2);
+            l.v += (tgt - l.y) * 0.16;
+            l.v *= 0.8;
+            l.y += l.v;
+            if (Math.abs(l.v) > 0.02 || Math.abs(tgt - l.y) > 0.05) moving = true;
+            var t = Math.min(1, Math.max(0, -l.y / 50));
+            l.el.style.setProperty('--y', l.y.toFixed(2) + 'px');
+            l.el.style.setProperty('--sy', (1 + Math.max(-0.08, Math.min(0.14, -l.v * 0.02))).toFixed(3));
+            l.el.style.setProperty('--t', t.toFixed(3));
+          });
+          if (moving || pulse || px != null) raf = requestAnimationFrame(tick);
+        }
+        function kick() { if (!raf && !rm) raf = requestAnimationFrame(tick); }
+        function local(e) { var r = wd.getBoundingClientRect(); return (e.clientX - r.left) * (wd.offsetWidth / (r.width || 1)); }
+        wd.addEventListener('pointermove', function (e) { if (!L[0].x) measure(); px = local(e); kick(); });
+        wd.addEventListener('pointerleave', function () { px = null; kick(); });
+        range.addEventListener('input', function () { amp = +range.value; val.textContent = range.value; kick(); });
+        root.querySelector('.u205-go').addEventListener('click', function () { measure(); pulse = performance.now(); kick(); });
+        window.addEventListener('resize', measure);
+        setTimeout(measure, 100);
+      })();
+      </script>
+
+      <div class="flex-col w-full gap-16" style="align-items:center;">
+        <!-- Lucian UX/UI Prompt #002 · MIT License (c) 2026 Seokwoooo · https://lucianlabs.dev/uxui-prompt/#002 -->
+        <style>
+        .u002{
+          --bg:#16151B;
+          --fg:#F7F5F0;
+          --blob:linear-gradient(135deg,var(--primary, #8B6CFF),var(--secondary, #ec4899) 60%,#2FC7B4);
+          position:relative;
+          width:100%;
+          max-width:340px;
+          height:100px;
+          display:grid;
+          place-items:center;
+          margin:0 auto;
+        }
+        @media (prefers-color-scheme:dark){
+          :root:not([data-theme="light"]) .u002{
+            --bg:#F4F0E8;
+            --fg:#121117;
+          }
+        }
+        :root[data-theme="dark"] .u002,
+        body .u002{
+          --bg:#F4F0E8;
+          --fg:#121117;
+        }
+        .u002-mag{transition:translate .9s var(--ux-spring)}
+        .u002-btn{
+          position:relative;
+          display:flex;
+          align-items:center;
+          justify-content:space-between;
+          gap:18px;
+          width:100%;
+          max-width:300px;
+          height:76px;
+          padding:0 10px 0 32px;
+          border:0;
+          border-radius:999px;
+          background:var(--bg);
+          color:var(--fg);
+          overflow:hidden;
+          isolation:isolate;
+          box-shadow:0 24px 40px -24px rgba(40,24,110,.6),0 0 0 1px color-mix(in srgb,var(--fg) 8%,transparent);
+          transition:transform .6s var(--ux-spring),box-shadow .6s var(--ux-ease);
+          cursor:pointer;
+          text-decoration:none;
+          font-family:inherit;
+        }
+        .u002-btn:hover{box-shadow:0 30px 52px -22px rgba(91,72,255,.7),0 0 0 1px transparent}
+        .u002-btn:active{transform:scale(.96)}
+        .u002-btn:focus-visible{outline:2px solid var(--ux-accent);outline-offset:5px}
+
+        .u002-fill{
+          position:absolute;
+          inset:0;
+          z-index:-1;
+          background:var(--blob);
+          clip-path:circle(28px at calc(100% - 38px) 50%);
+          transition:clip-path .8s var(--ux-ease);
+        }
+        .u002-btn:hover .u002-fill,
+        .u002-btn:focus-visible .u002-fill{
+          clip-path:circle(160% at calc(100% - 38px) 50%);
+        }
+        .u002-txt{
+          position:relative;
+          overflow:hidden;
+          padding:5px 0;
+          font-size:18px;
+          font-weight:750;
+          letter-spacing:-.02em;
+          white-space:nowrap;
+          transition:translate .7s var(--ux-spring),color .5s var(--ux-ease);
+        }
+        .u002-btn:hover .u002-txt{color:#ffffff}
+        .u002-txt span{display:block;transition:transform .6s var(--ux-spring),opacity .35s var(--ux-ease)}
+        .u002-txt span+span{position:absolute;left:0;top:5px;transform:translateY(130%);opacity:0}
+        .u002[data-state="go"] .u002-txt span:first-child{transform:translateY(-130%);opacity:0}
+        .u002[data-state="go"] .u002-txt span+span{transform:none;opacity:1}
+        .u002-orb{
+          position:relative;
+          width:56px;
+          height:56px;
+          border-radius:50%;
+          display:grid;
+          place-items:center;
+          color:#ffffff;
+          overflow:hidden;
+          flex:none;
+          transition:translate .7s var(--ux-spring);
+        }
+        .u002-orb svg{position:absolute;width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;stroke-linejoin:round}
+        .u002-orb svg:last-child{transform:translateX(-46px)}
+        .u002[data-state="go"] .u002-orb svg:first-child{animation:u002-out .55s var(--ux-ease) forwards}
+        .u002[data-state="go"] .u002-orb svg:last-child{animation:u002-in .6s var(--ux-spring) .28s forwards}
+        @keyframes u002-out{to{transform:translateX(46px)}}
+        @keyframes u002-in{to{transform:none}}
+        .u002-glow{
+          position:absolute;
+          left:50%;
+          top:50%;
+          width:300px;
+          height:110px;
+          margin:-55px 0 0 -150px;
+          border-radius:50%;
+          background:var(--blob);
+          filter:blur(36px);
+          opacity:0;
+          z-index:-1;
+          transition:opacity .7s var(--ux-ease);
+        }
+        .u002:hover .u002-glow{opacity:.45}
+        .u002-live{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+        </style>
+
+        <div class="ux u002" data-state="idle">
+          <span class="u002-glow" aria-hidden="true"></span>
+          <div class="u002-mag">
+            <button class="u002-btn" id="btn-create-room" type="button" aria-label="Tạo phòng mới">
+              <span class="u002-fill" aria-hidden="true"></span>
+              <span class="u002-txt"><span>Tạo phòng mới</span><span aria-hidden="true">Đang tạo phòng...</span></span>
+              <span class="u002-orb" aria-hidden="true">
+                <svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+                <svg viewBox="0 0 24 24"><path d="M5 12h13M13 6l6 6-6 6"/></svg>
+              </span>
+            </button>
+          </div>
+          <span class="u002-live" aria-live="polite"></span>
+        </div>
+
+        <script>
+        (function () {
+          var root = document.currentScript ? document.currentScript.previousElementSibling : document.querySelector('.u002');
+          if (!root) return;
+          var btn = root.querySelector('.u002-btn');
+          var mag = root.querySelector('.u002-mag');
+          var txt = root.querySelector('.u002-txt');
+          var orb = root.querySelector('.u002-orb');
+          var live = root.querySelector('.u002-live');
+          var rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          var t = 0;
+
+          root.addEventListener('pointermove', function (e) {
+            if (rm) return;
+            var r = btn.getBoundingClientRect();
+            var dx = e.clientX - (r.left + r.width / 2);
+            var dy = e.clientY - (r.top + r.height / 2);
+            var p = Math.max(0, 1 - Math.hypot(dx, dy) / 240);
+            mag.style.translate = (dx * 0.12 * p).toFixed(1) + 'px ' + (dy * 0.22 * p).toFixed(1) + 'px';
+            txt.style.translate = (dx * 0.05 * p).toFixed(1) + 'px ' + (dy * 0.08 * p).toFixed(1) + 'px';
+            orb.style.translate = (dx * 0.1 * p).toFixed(1) + 'px ' + (dy * 0.14 * p).toFixed(1) + 'px';
+          });
+          root.addEventListener('pointerleave', function () {
+            mag.style.translate = txt.style.translate = orb.style.translate = '0px 0px';
+          });
+
+          btn.addEventListener('click', function (e) {
+            if (!e._bypassed && !rm) {
+              e.stopImmediatePropagation();
+              e.preventDefault();
+              clearTimeout(t);
+              root.dataset.state = 'idle';
+              void btn.offsetWidth;
+              root.dataset.state = 'go';
+              live.textContent = 'Đang tạo phòng...';
+              t = setTimeout(function () {
+                if (root.isConnected) {
+                  root.dataset.state = 'idle';
+                  live.textContent = '';
+                }
+              }, 1900);
+              setTimeout(function () {
+                var evt = new MouseEvent('click', { bubbles: true, cancelable: true });
+                evt._bypassed = true;
+                btn.dispatchEvent(evt);
+              }, 380);
+              return;
+            }
+            clearTimeout(t);
+            root.dataset.state = 'idle';
+            void btn.offsetWidth;
+            root.dataset.state = 'go';
+            live.textContent = 'Đang tạo phòng...';
+            t = setTimeout(function () {
+              if (root.isConnected) {
+                root.dataset.state = 'idle';
+                live.textContent = '';
+              }
+            }, rm ? 900 : 1900);
+          }, true);
+        })();
+        </script>
+
+        <!-- Lucian UX/UI Prompt #001 · MIT License (c) 2026 Seokwoooo · https://lucianlabs.dev/uxui-prompt/#001 -->
+        <style>
+        .u001{
+          --g1:rgba(255,255,255,.66);
+          --g2:rgba(255,255,255,.16);
+          --g3:rgba(255,255,255,.4);
+          --hi:rgba(255,255,255,.95);
+          --rim:rgba(255,255,255,.65);
+          --drop:rgba(70,48,160,.42);
+          --blob:.55;
+          position:relative;
+          width:100%;
+          max-width:340px;
+          height:105px;
+          display:grid;
+          place-items:center;
+          isolation:isolate;
+          margin:0 auto;
+        }
+        @media (prefers-color-scheme:dark){
+          :root:not([data-theme="light"]) .u001{
+            --g1:rgba(255,255,255,.2);
+            --g2:rgba(255,255,255,.03);
+            --g3:rgba(255,255,255,.1);
+            --hi:rgba(255,255,255,.5);
+            --rim:rgba(255,255,255,.16);
+            --drop:rgba(0,0,0,.75);
+            --blob:.5;
+          }
+        }
+        :root[data-theme="dark"] .u001,
+        body .u001{
+          --g1:rgba(255,255,255,.2);
+          --g2:rgba(255,255,255,.03);
+          --g3:rgba(255,255,255,.1);
+          --hi:rgba(255,255,255,.5);
+          --rim:rgba(255,255,255,.16);
+          --drop:rgba(0,0,0,.75);
+          --blob:.5;
+        }
+        .u001-blobs{position:absolute;inset:0;z-index:-1;pointer-events:none}
+        .u001-blobs i{position:absolute;border-radius:50%;filter:blur(30px);opacity:var(--blob);animation:u001-drift 12s ease-in-out infinite alternate}
+        .u001-blobs i:nth-child(1){left:30px;top:20px;width:130px;height:90px;background:#8B6CFF}
+        .u001-blobs i:nth-child(2){right:24px;bottom:10px;width:130px;height:80px;background:#33B6FF;animation-delay:-4s}
+        .u001-blobs i:nth-child(3){left:140px;top:15px;width:75px;height:75px;background:#3BE0B0;opacity:calc(var(--blob) * .7);animation-delay:-8s}
+        @keyframes u001-drift{from{transform:translate3d(-10px,-6px,0) scale(1)}to{transform:translate3d(12px,8px,0) scale(1.12)}}
+        .u001-mag{transition:translate .8s var(--ux-spring)}
+        .u001-float{animation:u001-float 6s ease-in-out infinite}
+        @keyframes u001-float{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+        .u001-btn{
+          position:relative;
+          display:block;
+          width:260px;
+          height:72px;
+          padding:0;
+          border:0;
+          border-radius:999px;
+          overflow:hidden;
+          isolation:isolate;
+          color:var(--ux-ink);
+          background:linear-gradient(150deg,var(--g1),var(--g2) 55%,var(--g3));
+          -webkit-backdrop-filter:blur(18px) saturate(180%);
+          backdrop-filter:blur(18px) saturate(180%);
+          box-shadow:inset 0 1.5px 0 var(--hi),inset 0 -12px 20px -14px var(--hi),inset 0 0 0 1px var(--rim),0 26px 44px -22px var(--drop),0 3px 8px -4px var(--drop);
+          transition:width .7s var(--ux-ease),transform .55s var(--ux-spring),box-shadow .6s var(--ux-ease);
+          cursor:pointer;
+          font-family:inherit;
+        }
+        .u001-btn::before{
+          content:"";
+          position:absolute;
+          left:9%;
+          right:9%;
+          top:7%;
+          height:42%;
+          border-radius:999px;
+          pointer-events:none;
+          background:linear-gradient(180deg,rgba(255,255,255,.42),rgba(255,255,255,0));
+        }
+        .u001-btn::after{
+          content:"";
+          position:absolute;
+          inset:0;
+          border-radius:inherit;
+          pointer-events:none;
+          opacity:0;
+          transition:opacity .4s var(--ux-ease);
+          background:radial-gradient(130px 70px at var(--mx,50%) var(--my,0%),rgba(255,255,255,.4),transparent 70%);
+        }
+        .u001-btn:hover::after{opacity:1}
+        .u001-btn:active{transform:scale(1.03,.92)}
+        .u001-btn:focus-visible{outline:2px solid var(--ux-accent);outline-offset:6px}
+        .u001-sheen{
+          position:absolute;
+          top:-40%;
+          bottom:-40%;
+          left:0;
+          width:38%;
+          pointer-events:none;
+          background:linear-gradient(100deg,transparent,rgba(255,255,255,.45) 50%,transparent);
+          transform:translateX(-150%) skewX(-12deg);
+          transition:transform 1.1s var(--ux-ease);
+        }
+        .u001-btn:hover .u001-sheen{transform:translateX(300%) skewX(-12deg)}
+        .u001-txt,.u001-done{
+          position:absolute;
+          inset:0;
+          display:flex;
+          align-items:center;
+          justify-content:center;
+          gap:10px;
+          font-size:18px;
+          font-weight:680;
+          letter-spacing:-.025em;
+          white-space:nowrap;
+          transition:opacity .35s var(--ux-ease),transform .55s var(--ux-ease),filter .4s var(--ux-ease);
+        }
+        .u001-done{opacity:0;transform:translateY(14px);filter:blur(4px)}
+        .u001-done b{
+          width:30px;
+          height:30px;
+          border-radius:50%;
+          display:grid;
+          place-items:center;
+          background:var(--ux-mint);
+          color:#fff;
+          box-shadow:0 0 0 6px color-mix(in srgb,var(--ux-mint) 22%,transparent);
+        }
+        .u001-done svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2.8;stroke-linecap:round;stroke-linejoin:round}
+        .u001-done path{stroke-dasharray:18;stroke-dashoffset:18;transition:stroke-dashoffset .5s var(--ux-ease) .3s}
+        .u001-spin{position:absolute;left:50%;top:50%;width:30px;height:30px;margin:-15px 0 0 -15px;opacity:0;transform:scale(.5);transition:opacity .35s var(--ux-ease),transform .6s var(--ux-spring)}
+        .u001-spin svg{width:100%;height:100%;fill:none;stroke:currentColor;stroke-width:2.4;stroke-linecap:round;animation:u001-rot 1s linear infinite}
+        .u001-spin circle{stroke-dasharray:1 56;animation:u001-arc 1.4s ease-in-out infinite}
+        @keyframes u001-rot{to{transform:rotate(360deg)}}
+        @keyframes u001-arc{0%,100%{stroke-dasharray:1 56}50%{stroke-dasharray:38 19}}
+        .u001[data-state="load"] .u001-btn{width:72px;cursor:progress}
+        .u001[data-state="load"] .u001-txt{opacity:0;transform:translateY(-14px);filter:blur(5px)}
+        .u001[data-state="load"] .u001-spin{opacity:1;transform:none}
+        .u001[data-state="ok"] .u001-btn{transition-timing-function:var(--ux-spring);box-shadow:inset 0 1.5px 0 var(--hi),inset 0 0 0 1px var(--rim),0 26px 44px -22px var(--drop),0 0 52px -8px color-mix(in srgb,var(--ux-mint) 70%,transparent)}
+        .u001[data-state="ok"] .u001-txt{opacity:0;transform:translateY(-14px);filter:blur(5px)}
+        .u001[data-state="ok"] .u001-done{opacity:1;transform:none;filter:none}
+        .u001[data-state="ok"] .u001-done path{stroke-dashoffset:0}
+        .u001-live{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+        </style>
+
+        <div class="ux u001" data-state="idle">
+          <div class="u001-blobs" aria-hidden="true"><i></i><i></i><i></i></div>
+          <div class="u001-mag">
+            <div class="u001-float">
+              <button class="u001-btn" id="btn-join-room" type="button" aria-label="Tham gia phòng">
+                <span class="u001-sheen" aria-hidden="true"></span>
+                <span class="u001-txt">🚪 Tham gia phòng</span>
+                <span class="u001-spin" aria-hidden="true"><svg viewBox="0 0 30 30"><circle cx="15" cy="15" r="10"/></svg></span>
+                <span class="u001-done" aria-hidden="true"><b><svg viewBox="0 0 16 16"><path d="M3.5 8.4l3 3 6-6.4"/></svg></b>Sẵn sàng</span>
+              </button>
+            </div>
+          </div>
+          <span class="u001-live" aria-live="polite"></span>
+        </div>
+
+        <script>
+        (function () {
+          var root = document.currentScript ? document.currentScript.previousElementSibling : document.querySelector('.u001');
+          if (!root) return;
+          var btn = root.querySelector('.u001-btn');
+          var mag = root.querySelector('.u001-mag');
+          var live = root.querySelector('.u001-live');
+          var rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+          var timers = [];
+          function later(fn, ms) { timers.push(setTimeout(function () { if (root.isConnected) fn(); }, ms)); }
+          function clear() { timers.forEach(clearTimeout); timers = []; }
+
+          root.addEventListener('pointermove', function (e) {
+            var r = btn.getBoundingClientRect();
+            var dx = e.clientX - (r.left + r.width / 2);
+            var dy = e.clientY - (r.top + r.height / 2);
+            var pull = rm ? 0 : Math.max(0, 1 - Math.hypot(dx, dy) / 190);
+            mag.style.translate = (dx * 0.18 * pull).toFixed(1) + 'px ' + (dy * 0.18 * pull).toFixed(1) + 'px';
+            btn.style.setProperty('--mx', ((e.clientX - r.left) / r.width * 100).toFixed(1) + '%');
+            btn.style.setProperty('--my', ((e.clientY - r.top) / r.height * 100).toFixed(1) + '%');
+          });
+          root.addEventListener('pointerleave', function () { mag.style.translate = '0px 0px'; });
+
+          btn.addEventListener('click', function (e) {
+            if (!e._bypassed && !rm) {
+              e.stopImmediatePropagation();
+              e.preventDefault();
+              if (root.dataset.state === 'load') return;
+              clear();
+              root.dataset.state = 'load';
+              btn.setAttribute('aria-busy', 'true');
+              live.textContent = 'Đang mở phòng...';
+              later(function () {
+                root.dataset.state = 'ok';
+                btn.removeAttribute('aria-busy');
+                live.textContent = 'Sẵn sàng';
+              }, 700);
+              later(function () {
+                root.dataset.state = 'idle';
+                live.textContent = '';
+                var evt = new MouseEvent('click', { bubbles: true, cancelable: true });
+                evt._bypassed = true;
+                btn.dispatchEvent(evt);
+              }, 1250);
+              return;
+            }
+            clear();
+            root.dataset.state = 'idle';
+            live.textContent = '';
+          }, true);
+        })();
+        </script>
+      </div>
+
+      <p class="text-muted text-center">Tạo phòng, thêm bài hát, mời bạn bè và bắt đầu!</p>
+    </div>
+
+    <!-- ============================================================
+         SCREEN 2: Host Room Setup & Lobby
+         ============================================================ -->
+    <div id="screen-host-lobby" class="screen">
+      <!-- Room Info Header -->
+      <div class="card w-full text-center">
+        <h2>Phòng của bạn</h2>
+        <div id="room-code-display"></div>
+        <img id="qr-code-img" src="" alt="QR Code" />
+        <p id="qr-join-url" class="text-muted" style="font-size:0.85rem;margin-top:8px;word-break:break-all;display:none"></p>
+        <div class="flex-row" style="justify-content:center;margin-top:12px">
+          <button id="btn-copy-code" class="btn btn-small">📋 Copy mã</button>
+          <button id="btn-toggle-qr" class="btn btn-small">📱 Hiện QR</button>
+        </div>
+      </div>
+
+      <!-- Song Management -->
+      <div class="card song-section w-full">
+        <div class="flex-row" style="justify-content:space-between;align-items:center;width:100%;margin-bottom:8px">
+          <h3 style="margin:0">🎶 Danh sách bài hát</h3>
+          <button type="button" id="btn-add-demo-songs" class="btn btn-secondary btn-small">✨ Nạp bài hát mẫu</button>
+        </div>
+
+        <div class="upload-area" id="upload-area">
+          <div class="upload-icon">🎵</div>
+          <p>Kéo thả file nhạc vào đây hoặc click để chọn</p>
+          <input type="file" id="file-input" accept="audio/*" multiple hidden />
+        </div>
+
+        <div id="song-list" class="song-list"></div>
+
+        <!-- Manual song add / YouTube link -->
+        <div class="flex-col w-full" style="gap:6px;margin-top:8px">
+          <div class="flex-row w-full" style="flex-wrap:wrap;gap:8px">
+            <input
+              type="text"
+              id="manual-song-title"
+              class="input-large"
+              placeholder="Tên bài hát (để trống sẽ tự lấy từ YouTube)"
+              style="flex:1.2;min-width:180px"
+            />
+            <input
+              type="text"
+              id="manual-song-url"
+              class="input-large"
+              placeholder="Dán link YouTube hoặc link file nhạc"
+              style="flex:1.8;min-width:200px"
+            />
+            <button id="btn-add-manual" class="btn btn-primary btn-small">➕ Thêm</button>
+          </div>
+          <p class="text-muted" style="font-size:0.8rem">
+            💡 <strong>Mẹo:</strong> Dán link YouTube (youtube.com hoặc youtu.be), hệ thống sẽ tự động phát âm thanh và nhận diện tên bài!
+          </p>
+          <div id="mount-lobby-player" style="margin-top:10px;width:100%"></div>
+        </div>
+      </div>
+
+      <!-- Player List -->
+      <div class="card w-full">
+        <h3>👥 Người chơi <span id="player-count"></span></h3>
+        <div id="host-player-list" class="player-list">
+          <p class="text-muted">Đang chờ người chơi tham gia...</p>
+        </div>
+      </div>
+
+      <!-- Settings -->
+      <div class="card w-full flex-row" style="justify-content:space-between;align-items:center">
+        <label for="round-duration">⏱️ Thời gian mỗi câu:</label>
+        <select id="round-duration">
+          <option value="15">15s</option>
+          <option value="20">20s</option>
+          <option value="30" selected>30s</option>
+          <option value="45">45s</option>
+          <option value="60">60s</option>
+        </select>
+      </div>
+
+      <button id="btn-start-game" class="btn btn-primary btn-large" disabled>🚀 Bắt đầu trò chơi</button>
+      <button id="btn-back-host" class="btn btn-ghost">← Quay lại</button>
+    </div>
+
+    <!-- ============================================================
+         SCREEN 3: Player Join
+         ============================================================ -->
+    <div id="screen-player-join" class="screen">
+      <h2>Tham gia phòng</h2>
+
+      <div class="flex-col w-full gap-16">
+        <input
+          type="text"
+          id="input-room-code"
+          class="input-large"
+          placeholder="Nhập mã phòng"
+          maxlength="6"
+          autocapitalize="characters"
+        />
+        <input
+          type="text"
+          id="input-player-name"
+          class="input-large"
+          placeholder="Tên hiển thị của bạn"
+          maxlength="20"
+        />
+        <button id="btn-join-submit" class="btn btn-primary btn-large">Tham gia</button>
+        <div id="join-error" class="error-message" hidden></div>
+      </div>
+
+      <button id="btn-back-join" class="btn btn-ghost">← Quay lại</button>
+    </div>
+
+    <!-- ============================================================
+         SCREEN 4: Player Waiting Lobby
+         ============================================================ -->
+    <div id="screen-player-lobby" class="screen">
+      <h2>Đã vào phòng!</h2>
+      <p>Mã phòng: <strong id="player-room-code"></strong></p>
+      <p>Xin chào, <span id="player-name-display"></span></p>
+
+      <p class="waiting-dots">Đang chờ chủ phòng bắt đầu</p>
+
+      <div id="lobby-player-list" class="player-list"></div>
+    </div>
+
+    <!-- ============================================================
+         SCREEN 5: Host Game Control View
+         ============================================================ -->
+    <div id="screen-game-host" class="screen">
+      <!-- Top bar -->
+      <div class="flex-row w-full" style="justify-content:space-between">
+        <span id="round-indicator">Câu 1/1</span>
+        <span id="host-timer" class="timer-display">30</span>
+      </div>
+
+      <!-- Audio player area -->
+      <audio id="host-audio" hidden></audio>
+
+      <!-- Unified Audio / YouTube slot for host -->
+      <div id="mount-host-player" style="width:100%"></div>
+
+      <div id="current-song-title" class="song-reveal"></div>
+
+      <!-- Answer tracker -->
+      <p id="answer-tracker">Đã trả lời: 0/0</p>
+
+      <div id="answer-status-list" class="answer-status-list"></div>
+
+      <!-- Control buttons -->
+      <div class="flex-row w-full" style="justify-content:center;flex-wrap:wrap">
+        <button id="btn-end-round" class="btn btn-warning">⏭️ Kết thúc lượt</button>
+        <button id="btn-next-round" class="btn btn-primary" hidden>▶️ Câu tiếp theo</button>
+        <button id="btn-end-game" class="btn btn-danger" hidden>🏁 Kết thúc trò chơi</button>
+      </div>
+    </div>
+
+    <!-- ============================================================
+         SCREEN 6: Player Game View
+         ============================================================ -->
+    <div id="screen-game-player" class="screen">
+      <!-- Top bar -->
+      <div class="flex-row w-full" style="justify-content:space-between">
+        <span id="player-round-indicator">Câu 1/1</span>
+        <span id="player-timer" class="timer-display timer-animated">30</span>
+      </div>
+
+      <!-- Unified Audio / YouTube slot for player -->
+      <div id="mount-player-player" style="width:100%"></div>
+
+      <!-- Answer section -->
+      <input
+        type="text"
+        id="input-answer"
+        class="input-answer input-large"
+        placeholder="Nhập tên bài hát..."
+        autocomplete="off"
+      />
+      <button id="btn-submit-answer" class="btn btn-primary btn-large">Trả lời!</button>
+
+      <!-- Feedback area -->
+      <div id="answer-feedback" class="answer-feedback" hidden></div>
+
+      <!-- Hint -->
+      <p id="hint-display" class="text-muted">💡 Gợi ý: -- ký tự</p>
+
+      <audio id="player-audio" hidden></audio>
+    </div>
+
+    <!-- ============================================================
+         SCREEN 7: Round Results
+         ============================================================ -->
+    <div id="screen-round-results" class="screen">
+      <h2 id="results-round-title">Kết quả câu 1</h2>
+
+      <div id="results-correct-answer" class="correct-answer-reveal">🎵 Đáp án: ___</div>
+
+      <div class="results-table w-full">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Tên</th>
+              <th>Câu trả lời</th>
+              <th>Kết quả</th>
+              <th>Thời gian</th>
+              <th>Điểm</th>
+            </tr>
+          </thead>
+          <tbody id="results-body"></tbody>
+        </table>
+      </div>
+
+      <div class="leaderboard-mini w-full">
+        <h3>🏆 Bảng xếp hạng</h3>
+        <ol id="leaderboard-list"></ol>
+      </div>
+
+      <!-- Host-only continue button (toggled by JS) -->
+      <button id="btn-continue" class="btn btn-primary btn-large">▶️ Tiếp tục</button>
+      <!-- Player waiting text (toggled by JS) -->
+      <p class="text-muted waiting-text" style="display:none">Đang chờ chủ phòng...</p>
+    </div>
+
+    <!-- ============================================================
+         SCREEN 8: Game Over / Final Results
+         ============================================================ -->
+    <div id="screen-game-over" class="screen">
+      <h1 class="confetti-title">🏆 Kết thúc!</h1>
+
+      <!-- Podium -->
+      <div class="podium" id="podium-container">
+        <!-- Populated by JS: .podium-player.first/.second/.third -->
+      </div>
+
+      <!-- Full leaderboard -->
+      <div class="full-leaderboard w-full">
+        <table>
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Tên</th>
+              <th>Điểm</th>
+              <th>Đúng/Tổng</th>
+              <th>Độ chính xác</th>
+              <th>Thời gian nhanh nhất</th>
+            </tr>
+          </thead>
+          <tbody id="final-leaderboard-body"></tbody>
+        </table>
+      </div>
+
+      <button id="btn-go-home" class="btn btn-primary btn-large">🏠 Về trang chủ</button>
+    </div>
+
+    <!-- ============================================================
+         UNIFIED MUSIC PLAYER CARD
+         Shared dynamic component mounted into:
+         - #mount-lobby-player (Lobby preview)
+         - #mount-host-player (Host quiz round)
+         - #mount-player-player (Player quiz round)
+         ============================================================ -->
+    <!-- Lucian UX/UI Prompt #007 · MIT License (c) 2026 Seokwoooo · https://lucianlabs.dev/uxui-prompt/#007 -->
+    <style>
+    .u007{
+      --grad1:var(--primary, #8B6CFF);
+      --grad2:var(--secondary, #FF6B8B);
+      position:relative;
+      width:100%;
+      max-width:320px;
+      display:flex;
+      flex-direction:column;
+      align-items:center;
+      justify-content:center;
+      margin:0 auto;
+    }
+    .u007-info{text-align:center;margin-bottom:4px}
+    .u007-info b{display:block;font-size:18px;font-weight:740;letter-spacing:-.03em;color:var(--ux-ink)}
+    .u007-info span{display:block;margin-top:4px;font-size:13px;color:var(--ux-ink-3)}
+    .u007-disc{position:relative;width:150px;height:150px;margin:14px 0 12px;display:grid;place-items:center}
+    .u007-ring{position:absolute;inset:0;transform:rotate(-90deg)}
+    .u007-ring circle{fill:none;stroke-width:4;stroke-linecap:round}
+    .u007-ring .u007-track{stroke:var(--ux-line-2)}
+    .u007-ring .u007-arc{stroke:url(#u007-g);stroke-dasharray:452.4;stroke-dashoffset:calc(452.4 * (1 - var(--p,0)))}
+    .u007-btn{
+      position:relative;
+      width:104px;
+      height:104px;
+      border:0;
+      padding:0;
+      border-radius:50%;
+      color:#fff;
+      background:linear-gradient(145deg,var(--grad1),var(--grad2));
+      box-shadow:inset 0 1.5px 0 rgba(255,255,255,.4),inset 0 -10px 18px -10px rgba(40,10,80,.45),0 24px 44px -20px color-mix(in srgb,var(--grad1) 80%,transparent);
+      transition:transform .5s var(--ux-spring),box-shadow .5s var(--ux-ease);
+      cursor:pointer;
+    }
+    .u007-btn:hover{transform:scale(1.04)}
+    .u007-btn:active{transform:scale(.92)}
+    .u007-btn:focus-visible{outline:2px solid var(--ux-accent);outline-offset:6px}
+    .u007-btn svg{width:42px;height:42px;display:block;margin:auto}
+    .u007-btn polygon{fill:currentColor;stroke:currentColor;stroke-width:2.4;stroke-linejoin:round}
+    .u007-pulse{position:absolute;inset:6px;border-radius:50%;background:linear-gradient(145deg,var(--grad1),var(--grad2));opacity:0;z-index:-1}
+    .u007.is-play .u007-pulse{animation:u007-pulse 2.4s var(--ux-ease) infinite}
+    @keyframes u007-pulse{0%{opacity:.45;transform:scale(.9)}100%{opacity:0;transform:scale(1.5)}}
+    .u007-wave{display:flex;align-items:center;gap:3px;height:38px;width:270px;cursor:pointer;touch-action:none;border-radius:8px}
+    .u007-wave:focus-visible{outline:2px solid var(--ux-accent);outline-offset:4px}
+    .u007-wave i{flex:1;height:calc(var(--h) * 1%);min-height:4px;border-radius:3px;background:var(--ux-line-2);transform-origin:50% 50%;transition:background-color .25s var(--ux-ease)}
+    .u007-wave i.on{background:linear-gradient(180deg,var(--grad1),var(--grad2))}
+    .u007.is-play .u007-wave i.on:nth-last-child(-n+40){animation:u007-eq .9s ease-in-out infinite alternate;animation-delay:calc(var(--d) * -1s)}
+    @keyframes u007-eq{from{transform:scaleY(.82)}to{transform:scaleY(1.06)}}
+    .u007-time{display:flex;justify-content:space-between;width:270px;margin-top:6px;font-size:12.5px;font-weight:600;color:var(--ux-ink-3);font-variant-numeric:tabular-nums}
+    .u007-time b{color:var(--ux-ink-2);font-weight:650}
+    </style>
+
+    <div id="unified-music-card" class="music-player-card" style="display:none">
+      <div class="ux u007">
+        <div class="u007-info">
+          <b id="mpc-status-text">🎵 Đang phát nhạc...</b>
+          <span id="mpc-status-sub">Lắng nghe kỹ để đoán tên bài hát!</span>
+        </div>
+        <div class="u007-disc">
+          <svg class="u007-ring" viewBox="0 0 160 160" aria-hidden="true">
+            <defs>
+              <linearGradient id="u007-g" x1="0" y1="0" x2="1" y2="1">
+                <stop offset="0" stop-color="var(--grad1, #8B6CFF)"/>
+                <stop offset="1" stop-color="var(--grad2, #FF6B8B)"/>
+              </linearGradient>
+            </defs>
+            <circle class="u007-track" cx="80" cy="80" r="72"/>
+            <circle class="u007-arc" cx="80" cy="80" r="72"/>
+          </svg>
+          <span class="u007-pulse" aria-hidden="true"></span>
+          <button class="u007-btn" type="button" aria-label="Play" aria-pressed="false">
+            <svg viewBox="0 0 40 40" aria-hidden="true">
+              <polygon class="u007-l"/>
+              <polygon class="u007-r"/>
+            </svg>
+          </button>
+        </div>
+        <div class="u007-wave" role="slider" tabindex="0" aria-label="Playback position" aria-valuemin="0" aria-valuemax="30" aria-valuenow="0" aria-valuetext="0 s"></div>
+        <div class="u007-time"><b class="u007-now">0:00</b><span class="u007-total">0:30</span></div>
+      </div>
+
+      <div class="flex-row" style="justify-content:center;margin-top:10px;width:100%">
+        <button type="button" id="btn-mpc-unmute" class="btn btn-warning btn-small mpc-btn-unmute">
+          🔊 Bật tiếng / Nghe ngay
+        </button>
+      </div>
+
+      <!-- YouTube Player Container -->
+      <div id="mpc-yt-wrapper" class="mpc-yt-wrapper" style="display:none">
+        <div id="yt-player-target"></div>
+        <div id="mpc-shield" class="mpc-shield">
+          <p class="shield-desc" style="margin:4px 0">Nhạc từ YouTube đang phát ngầm</p>
+          <button type="button" id="btn-toggle-yt-video" class="btn btn-tiny btn-secondary">
+            👁️ Hiện màn hình video (nếu chưa nghe tiếng)
+          </button>
+        </div>
+      </div>
+
+      <button type="button" id="btn-stop-preview" class="btn btn-danger btn-small" style="display:none;margin-top:10px;width:100%">
+        ⏹️ Dừng nghe thử
+      </button>
+    </div>
+
+    <script>
+    (function () {
+      var root = document.querySelector('.u007');
+      if (!root) return;
+      var btn = root.querySelector('.u007-btn');
+      var L = root.querySelector('.u007-l'), R = root.querySelector('.u007-r');
+      var wave = root.querySelector('.u007-wave');
+      var nowEl = root.querySelector('.u007-now');
+      var totalEl = root.querySelector('.u007-total');
+      var rm = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var gid = 'u007-g-' + Math.random().toString(36).slice(2, 7);
+      var grad = root.querySelector('linearGradient');
+      if (grad) grad.id = gid;
+      var arc = root.querySelector('.u007-arc');
+      if (arc) arc.style.stroke = 'url(#' + gid + ')';
+
+      var PLAY = [[[13, 8], [22.5, 13.6], [22.5, 26.4], [13, 32]], [[22.5, 13.6], [32, 20], [32, 20], [22.5, 26.4]]];
+      var PAUSE = [[[11, 9], [17, 9], [17, 31], [11, 31]], [[23, 9], [29, 9], [29, 31], [23, 31]]];
+      var shape = 0, raf = 0;
+      function draw(t) {
+        if (!L || !R) return;
+        [L, R].forEach(function (poly, k) {
+          poly.setAttribute('points', PLAY[k].map(function (p, j) {
+            var q = PAUSE[k][j];
+            return (p[0] + (q[0] - p[0]) * t).toFixed(2) + ',' + (p[1] + (q[1] - p[1]) * t).toFixed(2);
+          }).join(' '));
+        });
+      }
+      function morph(to) {
+        cancelAnimationFrame(raf);
+        var from = shape, t0 = performance.now(), D = rm ? 1 : 420;
+        (function f(now) {
+          var x = Math.min(1, (now - t0) / D);
+          var e = 1 + 2.2 * Math.pow(x - 1, 3) + 1.2 * Math.pow(x - 1, 2);
+          shape = from + (to - from) * e;
+          draw(shape);
+          if (x < 1) raf = requestAnimationFrame(f);
+        })(t0);
+      }
+      draw(0);
+
+      var N = 44, bars = [];
+      wave.innerHTML = '';
+      for (var i = 0; i < N; i++) {
+        var b = document.createElement('i');
+        var h = 30 + Math.abs(Math.sin(i * 0.9) * 46 + Math.sin(i * 0.37) * 24);
+        b.style.setProperty('--h', Math.min(100, h).toFixed(0));
+        b.style.setProperty('--d', (i % 7) / 7);
+        wave.appendChild(b);
+        bars.push(b);
+      }
+      var TOTAL = 30, pos = 0, playing = false, last = 0, loop = 0;
+      function fmt(s) { s = Math.max(0, Math.floor(s || 0)); return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+      function render() {
+        var safeTotal = TOTAL > 0 ? TOTAL : 30;
+        var p = Math.max(0, Math.min(1, pos / safeTotal));
+        root.style.setProperty('--p', p.toFixed(4));
+        var on = Math.round(p * N);
+        bars.forEach(function (b, k) { b.classList.toggle('on', k < on); });
+        if (nowEl) nowEl.textContent = fmt(pos);
+        if (totalEl) totalEl.textContent = fmt(safeTotal);
+        wave.setAttribute('aria-valuenow', String(Math.floor(pos)));
+        wave.setAttribute('aria-valuetext', Math.floor(pos / 60) + ' min ' + Math.floor(pos % 60) + ' s');
+      }
+      function tick(now) {
+        if (!root.isConnected || !playing) return;
+        pos += (now - (last || now)) / 1000;
+        last = now;
+        if (pos >= TOTAL) { pos = 0; }
+        render();
+        loop = requestAnimationFrame(tick);
+      }
+      function setPlay(v) {
+        playing = v;
+        root.classList.toggle('is-play', v);
+        btn.setAttribute('aria-pressed', String(v));
+        btn.setAttribute('aria-label', v ? 'Pause' : 'Play');
+        morph(v ? 1 : 0);
+        cancelAnimationFrame(loop);
+        if (v) { last = 0; loop = requestAnimationFrame(tick); }
+      }
+
+      btn.addEventListener('click', function () {
+        var nextState = !playing;
+        // Check YouTube player
+        if (window.ytPlayer && typeof window.ytPlayer.getPlayerState === 'function') {
+          try {
+            if (nextState) window.ytPlayer.playVideo();
+            else window.ytPlayer.pauseVideo();
+          } catch (e) {}
+        }
+        // Check HTML5 audio
+        var hostAud = document.getElementById('host-audio');
+        var playAud = document.getElementById('player-audio');
+        var active = (hostAud && hostAud.src) ? hostAud : playAud;
+        if (active && active.src) {
+          try {
+            if (nextState) active.play();
+            else active.pause();
+          } catch (e) {}
+        }
+        setPlay(nextState);
+      });
+
+      function seek(x) {
+        var r = wave.getBoundingClientRect();
+        pos = Math.max(0, Math.min(1, (x - r.left) / r.width)) * TOTAL;
+        render();
+        if (window.ytPlayer && typeof window.ytPlayer.seekTo === 'function') {
+          try { window.ytPlayer.seekTo(pos, true); } catch (e) {}
+        }
+        var hostAud = document.getElementById('host-audio');
+        var playAud = document.getElementById('player-audio');
+        var active = (hostAud && hostAud.src) ? hostAud : playAud;
+        if (active && active.duration) {
+          try { active.currentTime = pos; } catch (e) {}
+        }
+      }
+      wave.addEventListener('pointerdown', function (e) { wave.setPointerCapture(e.pointerId); seek(e.clientX); });
+      wave.addEventListener('pointermove', function (e) { if (wave.hasPointerCapture(e.pointerId)) seek(e.clientX); });
+      wave.addEventListener('keydown', function (e) {
+        var d = { ArrowRight: 5, ArrowUp: 5, ArrowLeft: -5, ArrowDown: -5 }[e.key];
+        if (e.key === 'Home') d = -TOTAL; if (e.key === 'End') d = TOTAL;
+        if (d) { e.preventDefault(); pos = Math.max(0, Math.min(TOTAL - 1, pos + d)); render(); }
+      });
+
+      // Sync with HTML5 audio events
+      var hostAud = document.getElementById('host-audio');
+      var playAud = document.getElementById('player-audio');
+      [hostAud, playAud].forEach(function(aud) {
+        if (!aud) return;
+        aud.addEventListener('play', function() { setPlay(true); });
+        aud.addEventListener('pause', function() { setPlay(false); });
+        aud.addEventListener('timeupdate', function() {
+          if (aud.duration && isFinite(aud.duration)) {
+            TOTAL = aud.duration;
+            pos = aud.currentTime;
+            render();
+          }
+        });
+      });
+
+      // Expose globally for app.js integration
+      window.syncU007 = {
+        setPlay: setPlay,
+        setTime: function(curr, total) {
+          pos = curr || 0;
+          if (total) TOTAL = total;
+          render();
+        }
+      };
+
+      render();
+    })();
+    </script>
+
+  </div><!-- /#app -->
+
+  <!-- Toast notification container -->
+  <div id="toast-container" class="toast-container"></div>
+
+  <!-- Loading overlay -->
+  <div id="loading-overlay" class="loading-overlay" hidden style="display: none;">
+    <div class="spinner"></div>
+    <p>Đang xử lý...</p>
+  </div>
+
+  <!-- Pre-define YouTube callback to prevent race condition -->
+  <script>
+    window.ytApiReady = false;
+    window.onYouTubeIframeAPIReady = function() {
+      window.ytApiReady = true;
+      if (typeof window.triggerYouTubeReady === 'function') {
+        window.triggerYouTubeReady();
+      }
+    };
+  </script>
+  <!-- YouTube Iframe API -->
+  <script src="https://www.youtube.com/iframe_api"></script>
+
+  <!-- Socket.IO client (Local first, CDN fallback) -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script>
+    if (typeof io === 'undefined') {
+      document.write('<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"><\/script>');
+    }
+  </script>
+  <script src="/js/app.js?v=7"></script>
+</body>
+</html>
