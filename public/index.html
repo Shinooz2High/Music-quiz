@@ -10,7 +10,7 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="/css/style.css?v=8" />
+  <link rel="stylesheet" href="/css/style.css?v=9" />
 </head>
 <body>
   <!-- Ambient Aurora Orbs for Glassmorphism -->
@@ -666,8 +666,9 @@
 
         <div class="upload-area" id="upload-area">
           <div class="upload-icon">🎵</div>
-          <p>Kéo thả file nhạc vào đây hoặc click để chọn</p>
-          <input type="file" id="file-input" accept="audio/*" multiple hidden />
+          <p><strong>Kéo thả nhiều file nhạc vào đây</strong> hoặc click để chọn từ máy</p>
+          <span class="text-muted" style="font-size:0.82rem;display:block;margin-top:4px">Hỗ trợ chọn nhiều file cùng lúc: MP3, WAV, M4A, AAC, FLAC (tối đa 25MB/file)</span>
+          <input type="file" id="file-input" accept="audio/*,.mp3,.wav,.ogg,.m4a,.aac,.webm,.flac" multiple hidden />
         </div>
 
         <div id="song-list" class="song-list"></div>
@@ -1219,6 +1220,6 @@
       document.write('<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"><\/script>');
     }
   </script>
-  <script src="/js/app.js?v=8"></script>
+  <script src="/js/app.js?v=9"></script>
 </body>
 </html>
