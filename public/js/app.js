@@ -537,6 +537,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (hostList) hostList.innerHTML = html;
     if (lobbyList) lobbyList.innerHTML = html;
     if (countEl) countEl.textContent = players.length;
+    const fsCountEl = document.getElementById('fs-player-count');
+    if (fsCountEl) fsCountEl.textContent = players.length;
 
     updateStartButton(players);
   }
@@ -896,6 +898,108 @@ document.addEventListener('DOMContentLoaded', () => {
           btnToggleQr.textContent = isVisible ? '📱 Ẩn QR' : '📱 Hiện QR';
           if (qrUrl) qrUrl.style.display = isVisible ? 'block' : 'none';
         }
+      });
+    }
+
+    // ── Fullscreen QR & Room Code Modal ──
+    const btnFullscreenQr = document.getElementById('btn-fullscreen-qr');
+    const modalFsQr = document.getElementById('modal-fullscreen-qr');
+    const btnCloseFsQr = document.getElementById('btn-close-fs-qr');
+    const btnCopyFsCode = document.getElementById('btn-copy-fs-code');
+
+    function openFullscreenQr() {
+      if (!modalFsQr) return;
+      const fsRoomCode = document.getElementById('fs-room-code');
+      const fsQrImg = document.getElementById('fs-qr-img');
+      const fsJoinUrl = document.getElementById('fs-join-url');
+      const fsPlayerCount = document.getElementById('fs-player-count');
+      const mainQrImg = document.getElementById('qr-code-img');
+      const mainJoinUrl = document.getElementById('qr-join-url');
+      const hostList = document.getElementById('host-player-list');
+
+      if (fsRoomCode) fsRoomCode.textContent = roomCode || '------';
+      if (fsQrImg && mainQrImg && mainQrImg.src) fsQrImg.src = mainQrImg.src;
+      if (fsJoinUrl) {
+        fsJoinUrl.textContent = (mainJoinUrl && mainJoinUrl.textContent) 
+          ? mainJoinUrl.textContent 
+          : (window.location.origin + '/?room=' + roomCode);
+      }
+      if (fsPlayerCount) {
+        const pCount = hostList ? hostList.children.length : 0;
+        fsPlayerCount.textContent = pCount;
+      }
+
+      modalFsQr.style.display = 'flex';
+
+      // Trải nghiệm toàn màn hình mượt mà nếu trình duyệt cho phép
+      try {
+        if (document.documentElement.requestFullscreen && !document.fullscreenElement) {
+          document.documentElement.requestFullscreen().catch(() => {});
+        }
+      } catch (e) {}
+    }
+
+    function closeFullscreenQr() {
+      if (!modalFsQr) return;
+      modalFsQr.style.display = 'none';
+      try {
+        if (document.fullscreenElement && document.exitFullscreen) {
+          document.exitFullscreen().catch(() => {});
+        }
+      } catch (e) {}
+    }
+
+    if (btnFullscreenQr) {
+      btnFullscreenQr.addEventListener('click', openFullscreenQr);
+    }
+    if (btnCloseFsQr) {
+      btnCloseFsQr.addEventListener('click', closeFullscreenQr);
+    }
+    if (modalFsQr) {
+      modalFsQr.addEventListener('click', (e) => {
+        if (e.target === modalFsQr) {
+          closeFullscreenQr();
+        }
+      });
+    }
+    if (btnCopyFsCode) {
+      btnCopyFsCode.addEventListener('click', () => {
+        if (navigator.clipboard && roomCode) {
+          navigator.clipboard.writeText(roomCode).then(() => {
+            showToast('Đã copy mã phòng!', 'success');
+          }).catch(() => {
+            showToast('Không thể copy.', 'error');
+          });
+        }
+      });
+    }
+
+    // Nhấn phím Escape để đóng nhanh màn hình QR phóng to
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && modalFsQr && modalFsQr.style.display !== 'none') {
+        closeFullscreenQr();
+      }
+    });
+
+    // ── Ẩn / Hiện danh sách bài hát (Bảo mật khi trình chiếu) ──
+    const btnToggleSongList = document.getElementById('btn-toggle-song-list');
+    const songListEl = document.getElementById('song-list');
+    const songListNotice = document.getElementById('song-list-hidden-notice');
+    let isSongListHidden = false;
+
+    if (btnToggleSongList) {
+      btnToggleSongList.addEventListener('click', () => {
+        isSongListHidden = !isSongListHidden;
+        if (songListEl) {
+          songListEl.style.display = isSongListHidden ? 'none' : 'flex';
+        }
+        if (songListNotice) {
+          songListNotice.style.display = isSongListHidden ? 'block' : 'none';
+        }
+        btnToggleSongList.textContent = isSongListHidden ? '👁️ Hiện danh sách' : '👁️ Ẩn danh sách';
+        btnToggleSongList.classList.toggle('btn-secondary', isSongListHidden);
+        btnToggleSongList.classList.toggle('btn-ghost', !isSongListHidden);
+        showToast(isSongListHidden ? 'Đã ẩn danh sách bài hát (Bảo mật)' : 'Đã hiện danh sách bài hát', 'info', 2000);
       });
     }
 
