@@ -1,0 +1,18 @@
+{
+  "name": "music-quiz-game",
+  "version": "1.0.0",
+  "description": "Interactive multiplayer music guessing game - Đoán bài hát",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "multer": "^1.4.5-lts.1",
+    "qrcode": "^1.5.3",
+    "socket.io": "^4.7.2",
+    "socket.io-client": "^4.8.4",
+    "uuid": "^9.0.0"
+  }
+}
