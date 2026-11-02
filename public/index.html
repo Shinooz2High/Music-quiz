@@ -10,7 +10,7 @@
     href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
     rel="stylesheet"
   />
-  <link rel="stylesheet" href="/css/style.css?v=7" />
+  <link rel="stylesheet" href="/css/style.css?v=8" />
 </head>
 <body>
   <!-- Ambient Aurora Orbs for Glassmorphism -->
@@ -641,17 +641,27 @@
         <div id="room-code-display"></div>
         <img id="qr-code-img" src="" alt="QR Code" />
         <p id="qr-join-url" class="text-muted" style="font-size:0.85rem;margin-top:8px;word-break:break-all;display:none"></p>
-        <div class="flex-row" style="justify-content:center;margin-top:12px">
+        <div class="flex-row" style="justify-content:center;margin-top:12px;gap:8px;flex-wrap:wrap">
           <button id="btn-copy-code" class="btn btn-small">📋 Copy mã</button>
           <button id="btn-toggle-qr" class="btn btn-small">📱 Hiện QR</button>
+          <button id="btn-fullscreen-qr" class="btn btn-small btn-secondary">⛶ Toàn màn hình QR</button>
         </div>
       </div>
 
       <!-- Song Management -->
       <div class="card song-section w-full">
-        <div class="flex-row" style="justify-content:space-between;align-items:center;width:100%;margin-bottom:8px">
+        <div class="flex-row" style="justify-content:space-between;align-items:center;width:100%;margin-bottom:8px;flex-wrap:wrap;gap:8px">
           <h3 style="margin:0">🎶 Danh sách bài hát</h3>
-          <button type="button" id="btn-add-demo-songs" class="btn btn-secondary btn-small">✨ Nạp bài hát mẫu</button>
+          <div class="flex-row" style="gap:8px;align-items:center">
+            <button type="button" id="btn-toggle-song-list" class="btn btn-ghost btn-small" title="Ẩn/hiện danh sách để tránh lộ đáp án khi trình chiếu">
+              👁️ Ẩn danh sách
+            </button>
+            <button type="button" id="btn-add-demo-songs" class="btn btn-secondary btn-small">✨ Nạp bài hát mẫu</button>
+          </div>
+        </div>
+
+        <div id="song-list-hidden-notice" class="song-list-hidden-notice" style="display:none">
+          🔒 <strong>Danh sách bài hát đang được ẩn</strong> để bảo mật đáp án cho người chơi khi chiếu lên màn hình lớn!
         </div>
 
         <div class="upload-area" id="upload-area">
@@ -1152,6 +1162,34 @@
 
   </div><!-- /#app -->
 
+  <!-- Fullscreen QR & Room Code Modal -->
+  <div id="modal-fullscreen-qr" class="modal-fullscreen-qr" style="display:none">
+    <div class="fs-qr-card">
+      <button type="button" id="btn-close-fs-qr" class="btn-close-fs" aria-label="Đóng">✕</button>
+      
+      <p class="fs-sub-title">QUÉT MÃ ĐỂ VÀO PHÒNG CHƠI</p>
+      
+      <div class="fs-room-code-wrapper">
+        <span class="fs-room-label">MÃ PHÒNG</span>
+        <span id="fs-room-code" class="fs-room-code">------</span>
+        <button type="button" id="btn-copy-fs-code" class="btn btn-tiny btn-ghost" title="Copy mã">📋</button>
+      </div>
+
+      <div class="fs-qr-image-wrapper">
+        <img id="fs-qr-img" src="" alt="Mã QR toàn màn hình" />
+      </div>
+
+      <p id="fs-join-url" class="fs-join-url">http://...</p>
+
+      <div class="fs-player-badge">
+        <span>👥 Người chơi đã vào: </span>
+        <strong id="fs-player-count">0</strong>
+      </div>
+
+      <p class="fs-hint-esc">Bấm <strong>ESC</strong> hoặc chạm vào nút <strong>✕</strong> để đóng</p>
+    </div>
+  </div>
+
   <!-- Toast notification container -->
   <div id="toast-container" class="toast-container"></div>
 
@@ -1181,6 +1219,6 @@
       document.write('<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"><\/script>');
     }
   </script>
-  <script src="/js/app.js?v=7"></script>
+  <script src="/js/app.js?v=8"></script>
 </body>
 </html>
