@@ -47,14 +47,14 @@ const C4 = 261.63, D4 = 293.66, E4 = 329.63, F4 = 349.23, G4 = 392.00, A4 = 440.
 
 // Song 1: Happy Birthday
 const s1Notes = [C4, C4, D4, C4, F4, E4, 0, C4, C4, D4, C4, G4, F4, 0, C4, C4, C5, A4, F4, E4, D4, 0, B4, B4, A4, F4, G4, F4];
-fs.writeFileSync(path.join(dir, 'happy-birthday.wav'), createWav(s1Notes, 0.35));
+fs.writeFileSync(path.join(dir, 'Golden Hour.mp3'), createWav(s1Notes, 0.35));
 
 // Song 2: See Tình
 const s2Notes = [E4, G4, A4, B4, A4, G4, E4, D4, E4, G4, A4, B4, C5, B4, A4, G4, A4, A4, G4, E4, D4, E4];
-fs.writeFileSync(path.join(dir, 'see-tinh.wav'), createWav(s2Notes, 0.28));
+fs.writeFileSync(path.join(dir, 'Nhẹ Buông.mp3'), createWav(s2Notes, 0.28));
 
 // Song 3: Cắt Đôi Nỗi Sầu
 const s3Notes = [A4, C5, B4, A4, G4, E4, G4, A4, A4, C5, B4, A4, G4, E4, D4, E4, A4, A4, B4, C5, B4, A4, G4, A4];
-fs.writeFileSync(path.join(dir, 'cat-doi-noi-sau.wav'), createWav(s3Notes, 0.28));
+fs.writeFileSync(path.join(dir, 'chờ chút.mp3'), createWav(s3Notes, 0.28));
 
 console.log('✅ 3 Demo audio files generated in public/samples/');
