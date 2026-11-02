@@ -83,8 +83,8 @@ const storage = multer.diskStorage({
   },
 });
 
-// Bộ lọc file: chỉ chấp nhận các định dạng âm thanh hợp lệ
-const ALLOWED_EXTENSIONS = ['.mp3', '.wav', '.ogg', '.m4a', '.aac', '.webm'];
+// Bộ lọc file: chấp nhận các định dạng âm thanh hợp lệ
+const ALLOWED_EXTENSIONS = ['.mp3', '.wav', '.ogg', '.m4a', '.aac', '.webm', '.flac'];
 
 const fileFilter = (req, file, cb) => {
   const ext = path.extname(file.originalname).toLowerCase();
@@ -98,7 +98,7 @@ const fileFilter = (req, file, cb) => {
 const upload = multer({
   storage,
   fileFilter,
-  limits: { fileSize: 20 * 1024 * 1024 }, // Giới hạn 20MB
+  limits: { fileSize: 25 * 1024 * 1024 }, // Giới hạn 25MB mỗi file
 });
 
 // =============================================================================
@@ -120,30 +120,60 @@ app.use(express.json());
 
 /**
  * POST /api/upload
- * Upload file âm thanh. Sử dụng multipart/form-data, field name: "audio".
- * Trả về: { fileName, originalName, url }
+ * Upload 1 hoặc nhiều file âm thanh cùng lúc.
+ * Chấp nhận: multipart/form-data với field 'audio' (single hoặc multiple) hoặc bất kỳ field nào.
+ * Trả về: { fileName, originalName, url, files: [...] }
  */
 app.post('/api/upload', (req, res) => {
-  upload.single('audio')(req, res, (err) => {
+  upload.any()(req, res, (err) => {
     if (err instanceof multer.MulterError) {
-      // Lỗi từ Multer (vd: file quá lớn)
       if (err.code === 'LIMIT_FILE_SIZE') {
-        return res.status(400).json({ error: 'File quá lớn. Giới hạn tối đa 20MB.' });
+        return res.status(400).json({ error: 'File quá lớn. Giới hạn tối đa 25MB mỗi file.' });
       }
-      return res.status(400).json({ error: err.message });
+      return res.status(400).json({ error: `Lỗi upload: ${err.message}` });
     } else if (err) {
-      // Lỗi khác (vd: định dạng không hợp lệ)
       return res.status(400).json({ error: err.message });
     }
 
-    if (!req.file) {
+    const files = req.files || (req.file ? [req.file] : []);
+    if (!files || files.length === 0) {
       return res.status(400).json({ error: 'Không tìm thấy file âm thanh. Vui lòng chọn file để upload.' });
     }
 
+    const processedFiles = files.map((file) => {
+      // Sửa lỗi phông chữ / mojibake khi Multer giải mã header utf-8 theo chuẩn latin1
+      let cleanOriginalName = file.originalname || '';
+      try {
+        let isAlreadyUnicode = false;
+        for (let i = 0; i < cleanOriginalName.length; i++) {
+          if (cleanOriginalName.charCodeAt(i) > 255) {
+            isAlreadyUnicode = true;
+            break;
+          }
+        }
+        if (!isAlreadyUnicode) {
+          const fixed = Buffer.from(cleanOriginalName, 'latin1').toString('utf8');
+          if (fixed !== cleanOriginalName && !fixed.includes('\uFFFD')) {
+            cleanOriginalName = fixed;
+          }
+        }
+      } catch (e) {}
+
+      return {
+        fileName: file.filename,
+        originalName: cleanOriginalName,
+        url: `/uploads/${file.filename}`,
+      };
+    });
+
+    // Trả về cả định dạng đơn (tương thích ngược) và mảng files
     res.json({
-      fileName: req.file.filename,
-      originalName: req.file.originalname,
-      url: `/uploads/${req.file.filename}`,
+      success: true,
+      count: processedFiles.length,
+      fileName: processedFiles[0].fileName,
+      originalName: processedFiles[0].originalName,
+      url: processedFiles[0].url,
+      files: processedFiles,
     });
   });
 });
@@ -261,6 +291,7 @@ function generateRoomCode() {
 function normalizeString(str) {
   return str
     .toLowerCase()
+    .replace(/[đĐ]/g, 'd')
     .normalize('NFD')
     .replace(/[\u0300-\u036f]/g, '') // Loại bỏ combining characters (dấu)
     .replace(/[^a-z0-9\s]/g, '')     // Chỉ giữ chữ-số và khoảng trắng
@@ -999,3 +1030,6 @@ server.listen(PORT, '0.0.0.0', () => {
     console.log(`   - Wi-Fi / LAN: http://${lanIp}:${PORT}`);
   }
 });
+
+module.exports = server;
+module.exports.app = app;
