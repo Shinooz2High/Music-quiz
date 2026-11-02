@@ -472,6 +472,21 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
+  /**
+   * Sửa lỗi phông chữ tiếng Việt / mojibake (vd: "Biáº¿t" -> "Biết")
+   */
+  function fixMojibake(str) {
+    if (!str) return '';
+    for (let i = 0; i < str.length; i++) {
+      if (str.charCodeAt(i) > 255) return str;
+    }
+    try {
+      const fixed = decodeURIComponent(escape(str));
+      if (fixed !== str && !fixed.includes('\uFFFD')) return fixed;
+    } catch (e) {}
+    return str;
+  }
+
   // ─── Song List Rendering (Host) ───────────────────────────────────────────
 
   /**
@@ -484,11 +499,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
     list.innerHTML = songs.map((song, i) => {
       const isYt = !!extractYouTubeId(song.url);
+      const cleanTitle = fixMojibake(song.title);
       return `
         <div class="song-item" data-id="${song.id}">
           <span class="song-number">${i + 1}</span>
           <div class="song-info">
-            <span class="song-title">${escapeHtml(song.title)}</span>
+            <span class="song-title">${escapeHtml(cleanTitle)}</span>
             <span class="song-badge ${isYt ? 'badge-yt' : 'badge-file'}">
               ${isYt ? '🎥 YouTube' : '🎵 File'}
             </span>
@@ -597,14 +613,16 @@ document.addEventListener('DOMContentLoaded', () => {
     for (const file of files) {
       try {
         const data = await uploadFile(file);
-        // Derive a display title from the original filename (strip extension)
-        const title = data.originalName.replace(/\.[^/.]+$/, '');
+        // Ưu tiên tên file gốc từ trình duyệt (chuẩn UTF-8) và khắc phục lỗi mojibake
+        const rawName = (file && file.name) ? file.name : (data.originalName || '');
+        const cleanName = fixMojibake(rawName);
+        const title = cleanName.replace(/\.[^/.]+$/, '').trim();
         songs.push({
           id: generateId(),
           title,
           fileName: data.fileName,
           url: data.url,
-          originalName: data.originalName,
+          originalName: cleanName,
         });
       } catch (err) {
         showToast(`Lỗi tải lên "${file.name}": ${err.message}`, 'error');
@@ -1009,24 +1027,24 @@ document.addEventListener('DOMContentLoaded', () => {
         const demoSongs = [
           {
             id: generateId(),
-            title: 'Happy Birthday',
-            fileName: 'happy-birthday.wav',
-            url: '/samples/happy-birthday.wav',
-            originalName: 'Happy Birthday (Demo)',
+            title: 'Golden Hour',
+            fileName: 'Golden Hour.mp3',
+            url: encodeURI('/samples/Golden Hour.mp3'),
+            originalName: 'Golden Hour.mp3',
           },
           {
             id: generateId(),
-            title: 'See Tình',
-            fileName: 'see-tinh.wav',
-            url: '/samples/see-tinh.wav',
-            originalName: 'See Tình (Demo)',
+            title: 'Nhẹ Buông',
+            fileName: 'Nhẹ Buông.mp3',
+            url: encodeURI('/samples/Nhẹ Buông.mp3'),
+            originalName: 'Nhẹ Buông.mp3',
           },
           {
             id: generateId(),
-            title: 'Cắt Đôi Nỗi Sầu',
-            fileName: 'cat-doi-noi-sau.wav',
-            url: '/samples/cat-doi-noi-sau.wav',
-            originalName: 'Cắt Đôi Nỗi Sầu (Demo)',
+            title: 'Chờ Chút',
+            fileName: 'chờ chút.mp3',
+            url: encodeURI('/samples/chờ chút.mp3'),
+            originalName: 'chờ chút.mp3',
           },
         ];
 
